@@ -4,6 +4,8 @@ import "./App.css";
 
 function App() {
   const [imagesNames, setImageNames] = useState([]);
+  const [imageCount, setImageCount] = useState(3);
+
   useEffect(() => {
     axios
       .get(`${process.env.REACT_APP_API_URL}/api/images`)
@@ -22,18 +24,35 @@ function App() {
         console.error(error);
       });
   }, []);
+
+  window.onscroll = () => {
+    if (
+      window.innerHeight + document.documentElement.scrollTop ===
+      document.documentElement.offsetHeight
+    ) {
+      if (imageCount + 3 >= imagesNames.length)
+        setImageCount(imagesNames.length);
+      else setImageCount(imageCount + 3);
+    }
+  };
+
   return (
     <div className="ImageList">
-      {imagesNames.map((imageObject) => {
+      {imagesNames.slice(0, imageCount).map((imageObject) => {
         return (
           <div key={imageObject.filename}>
             <p>{`${imageObject.sender} ${imageObject.datetime.toLocaleString(
               "en-GB"
             )}`}</p>
-            <img
-              src={`${process.env.REACT_APP_API_URL}/images/${imageObject.filename}`}
-              alt={imageObject.filename}
-            />
+
+            <a
+              href={`${process.env.REACT_APP_API_URL}/images/${imageObject.filename}`}
+            >
+              <img
+                src={`${process.env.REACT_APP_API_URL}/images/previews/${imageObject.filename}`}
+                alt={imageObject.filename}
+              />
+            </a>
           </div>
         );
       })}
