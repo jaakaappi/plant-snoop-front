@@ -27,8 +27,8 @@ function App() {
 
   window.onscroll = () => {
     if (
-      window.innerHeight + document.documentElement.scrollTop ===
-      document.documentElement.offsetHeight
+      window.innerHeight + document.documentElement.scrollTop >=
+      document.documentElement.offsetHeight - 100
     ) {
       if (imageCount + 3 >= imagesNames.length)
         setImageCount(imagesNames.length);
